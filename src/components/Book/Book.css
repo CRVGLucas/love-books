@@ -1,0 +1,11 @@
+.container-book{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.book-image {
+    height: 320px;
+}

@@ -1,0 +1,27 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 2.5rem;
+}
+
+.card-back{
+    display: none;
+}
+
+.card-img:hover {
+    z-index: 0;
+}
+
+.card-info {
+    text-align: center;
+
+}
+a {
+    text-decoration: none;
+    font-weight: bold;
+}
+.card-img {
+    height: 320px
+}
