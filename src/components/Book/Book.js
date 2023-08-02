@@ -1,6 +1,6 @@
 import React from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { deleteBook, getBookById, getBooksByCategory } from "./BookFunctions"
+import { addToFavorite, deleteBook, getBookById, getBooksByCategory, removeToFavorite, returnBookFavorite } from "./BookFunctions"
 import { Card } from "../Card/Card"
 import './Book.css'
 import { UserContext } from "../User/UserContext"
@@ -13,6 +13,7 @@ export function Book({ request}) {
     const [book, setBook] = React.useState('')
     const [relatedBooks, setRelatedBooks] = React.useState('')
     const context = React.useContext(UserContext)
+    const [ isBookFavorited, setIsBookFavorited] = React.useState( )
     const navigate = useNavigate();
     async function getBook(){
         setBook(await getBookById(id))
@@ -20,6 +21,8 @@ export function Book({ request}) {
     async function getRelatedBooks(){
         setRelatedBooks(await getBooksByCategory(book.category ? book.category : 'Todos', 5 ))
     }
+
+
     async function deleting(){
         deleteBook(id).then(() => {
             toast.success('Livro deletado com sucess', 
@@ -53,9 +56,36 @@ export function Book({ request}) {
             );
         })
     }
-    React.useEffect(() => {
+    async function setFav(){
+        setIsBookFavorited(await returnBookFavorite(id, context.user.idDocument))
+    }
+    function addFav(){
+        addToFavorite(id, context.user.idDocument).then(() => {
+            toast.success('Livro salvo como favorido', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                });
+            setFav()
+        }).catch(err => {
+
+        })
+    }
+    function removeFav(){
+        console.log("fav: ", isBookFavorited[0].idDocument)
+        removeToFavorite(isBookFavorited[0].idDocument).then(() => {
+            setIsBookFavorited(null)
+        })
+    }
+     React.useEffect( () => {
         getBook();
         getRelatedBooks()
+        setFav()
     }, [id])
     return (
         <div  style={{ display: 'flex', flexDirection: 'column', padding: '5rem', flexWrap: 'wrap'}}>
@@ -68,10 +98,13 @@ export function Book({ request}) {
                         </Link>
 
                         <AiOutlineDelete style={{ margin: '15px'}} cursor="pointer" size={35} color="red" onClick={() => deleting()}/>
-
-                        <AiOutlineStar style={{ margin: '15px'}} color="yellow" cursor="pointer" size={35}/>
-
-                        <AiFillStar style={{ margin: '15px'}} color="yellow" cursor="pointer" size={35}/>
+                        {
+                            !isBookFavorited && <AiOutlineStar onClick={() => addFav()} style={{ margin: '15px'}} color="yellow" cursor="pointer" size={35}/>
+                        }
+                        {
+                            isBookFavorited && <AiFillStar onClick={() => removeFav()} style={{ margin: '15px'}} color="yellow" cursor="pointer" size={35}/>
+                        }
+                        
                     </div>
                     
                 }

@@ -15,7 +15,12 @@ export function Login(){
     const [loading, setLoading] = React.useState(false);
     const context = React.useContext(UserContext)
     const navigate = useNavigate();
-    console.log("contexto: ", context)
+
+    React.useEffect(() => {
+        if(context.user){
+            navigate('/conta')
+        }
+    }, [])
 
     async function loginUser(event){
         event.preventDefault();
@@ -35,6 +40,7 @@ export function Login(){
             
             context.setUser(user)
             setLoading(false)
+            localStorage.setItem('user', JSON.stringify(user));
             navigate('/livros')
         } else {
             toast.error('Usuário ou senha incorretos, tente novamente.', {

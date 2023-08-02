@@ -1,6 +1,7 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, orderBy, query, updateDoc, where } from 'firebase/firestore/lite';
 import { fs } from '../../firebase/config';
-
+import React from 'react';
+import { UserContext } from '../User/UserContext';
 export async function getBooks(limitBooks = null){
     const bookCollection = collection(fs, 'books');
     let bookquery
@@ -72,4 +73,37 @@ export async function deleteBook(id) {
     //var docSnap = await getDoc(docRef);
     return deleteDoc(docRef);
     
+}
+export async function returnBookFavorite(idBook, idUser){
+    const tasksCol = collection(fs, 'favorites');
+    const queryTasks = query(tasksCol, where('idBook', '==', idBook) && where('idUser', '==', idUser))
+    const querySnapshot = await getDocs(queryTasks);
+    var tasksList = [];
+    querySnapshot.forEach((doc) => {
+        tasksList.push( { idDocument: doc.id, data: doc.data() });
+    });
+    return tasksList.length > 0 ? tasksList : null
+}
+
+export async function returnBookFavoriteByUser(idUser){
+    const tasksCol = collection(fs, 'favorites');
+    const queryTasks = query(tasksCol,  where('idUser', '==', idUser))
+    const querySnapshot = await getDocs(queryTasks);
+    var tasksList = [];
+    querySnapshot.forEach((doc) => {
+        tasksList.push( { idDocument: doc.id, data: doc.data() });
+    });
+    return tasksList.length > 0 ? tasksList : null
+}
+
+export function addToFavorite(idBook, idUser) {
+    const createdAt = new Date()
+    const categoryCol = collection(fs, 'favorites');
+    return addDoc(categoryCol, { idBook,idUser,  createdAt});
+}
+
+export function removeToFavorite(idFav) {
+    const docRef = doc(fs, 'favorites', idFav);
+
+    return deleteDoc(docRef);
 }

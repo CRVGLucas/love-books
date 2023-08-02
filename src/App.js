@@ -10,6 +10,8 @@ import { EditBook } from './components/Book/Edit';
 import { Login } from './components/User/Login';
 import { Register } from './components/User/Register';
 import UserStorage from './components/User/UserContext';
+import ProfileUser from './components/User/Profile';
+import { FavoritesBooks } from './components/Book/Favorites';
 
 function App() {
   return (
@@ -23,7 +25,10 @@ function App() {
             <Route path='/livros' element={ <ListBooks/>} />
             <Route path='/livro/:id' element={ <Book/> }/>
             <Route path='/editar/livro/:id' element={ <EditBook/> }/>
+
             <Route path='/login' element={ <Login/> }/>
+            <Route path='/conta' element={ <ProfileUser/> } />
+            <Route path='/favoritos' element={ <FavoritesBooks/> } />
 
             <Route path='/criar/livro' element={ <CreateBook/> }/>
             <Route path='/criar/usuario' element={ <Register/> }/>

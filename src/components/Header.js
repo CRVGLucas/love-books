@@ -12,6 +12,7 @@ export function Header() {
     }
     function logout(){
         context.setUser(null)
+        localStorage.removeItem('user')
         return navigate('/login')
     }
     return (
@@ -41,11 +42,11 @@ export function Header() {
                        }
                        {
                         context.user &&
-                         <Link className='header-option'>Minha conta</Link>
+                         <Link className='header-option' to={'/conta'}>Minha conta</Link>
                        }
                        {
                         context.user &&
-                         <Link className='header-option'>Meus Favoritos</Link>
+                         <Link className='header-option' to={'/favoritos'}>Meus Favoritos</Link>
                        }
                        {
                          context.user &&

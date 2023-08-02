@@ -1,4 +1,4 @@
-import { addDoc, collection, getDoc, getDocs, query, where } from "firebase/firestore/lite";
+import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore/lite";
 import { fs } from "../../firebase/config";
 
 export function createUser(user) {
@@ -25,4 +25,9 @@ export async function login(form){
         user =  { idDocument: doc.id, data: doc.data() };
     });
     return user;
+}
+
+export function editUser(user, id) {
+    const docRef = doc(fs, 'users', id);
+    return updateDoc(docRef, user);
 }
