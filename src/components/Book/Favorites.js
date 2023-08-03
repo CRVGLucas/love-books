@@ -6,33 +6,38 @@ import React from 'react';
 export function FavoritesBooks() {
     const context = React.useContext(UserContext)
     const [ favorites , setFavorites ] = React.useState('')
+    const [books, setBooks ] = React.useState('')
     async function getFavorites(){
         const fav = await returnBookFavoriteByUser(context.user.idDocument)
-        if (fav){
-            const books = []
-            fav.map( async (favorite) => { books.push( { idDocument:favorite.data.idBook, data: await getBookById(favorite.data.idBook)}) } )
-            console.log(books)
-            setFavorites(books)
-        } else {
-            setFavorites(null)
-        }
+        setFavorites(fav)
+        fav.map( async f => {
+            console.log("id: ", f.data.idBook)
+            const book = await  getBookById(f.data.idBook)
+            book.id = f.data.idBook
+            setBooks([...books, book ])
+       })
+       console.log('lviros: ', books)
+
     }
+
 
     React.useEffect(() => {
         getFavorites()
     }, [])
 
 
-
     return (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'row'}}>
             {
-                favorites && 
-                favorites.map((favorite) => {
+                books.length > 0 &&
+                books.map( book => {
                     return (
-                        <Card key={favorite.idDocument} id={favorite.idDocument} book={favorite.data}/>
+                        <Card key={ book.id } id={ book.id } book={ book }/>
                     )
                 })
+            }
+            {
+                !favorites && <p style={{ color: 'white'}}>Lista de favoritos vazia</p>
             }
         </div>
     )

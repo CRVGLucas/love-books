@@ -13,7 +13,7 @@ export function Book({ request}) {
     const [book, setBook] = React.useState('')
     const [relatedBooks, setRelatedBooks] = React.useState('')
     const context = React.useContext(UserContext)
-    const [ isBookFavorited, setIsBookFavorited] = React.useState( )
+    const [ isBookFavorited, setIsBookFavorited] = React.useState('')
     const navigate = useNavigate();
     async function getBook(){
         setBook(await getBookById(id))
@@ -57,7 +57,19 @@ export function Book({ request}) {
         })
     }
     async function setFav(){
-        setIsBookFavorited(await returnBookFavorite(id, context.user.idDocument))
+        console.log("id book: ", id);
+        console.log("id user: ", context.user.idDocument)
+        const favorited = await returnBookFavorite(id, context.user.idDocument)
+        //console.log("fav: ", fav)
+        favorited.map((fav) => {
+            if(fav.data.idBook == id){
+                console.log("cai aqui ???")
+                setIsBookFavorited(fav)
+            }
+        })
+
+        
+        console.log("favorite: ", isBookFavorited)
     }
     function addFav(){
         addToFavorite(id, context.user.idDocument).then(() => {

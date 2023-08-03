@@ -76,7 +76,7 @@ export async function deleteBook(id) {
 }
 export async function returnBookFavorite(idBook, idUser){
     const tasksCol = collection(fs, 'favorites');
-    const queryTasks = query(tasksCol, where('idBook', '==', idBook) && where('idUser', '==', idUser))
+    const queryTasks = query( tasksCol, where('idBook', '==', idBook) && where('idUser', '==', idUser) )
     const querySnapshot = await getDocs(queryTasks);
     var tasksList = [];
     querySnapshot.forEach((doc) => {
